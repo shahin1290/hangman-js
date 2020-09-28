@@ -1,17 +1,19 @@
-const game1 = new Hangman('new york', 2)
 const puzzleEl = document.querySelector('#puzzle')
 const guessesEl = document.querySelector('#guesses')
+const resetEl = document.querySelector('#reset')
+let game1
 
-puzzleEl.textContent = game1.puzzle
-guessesEl.textContent = game1.statusMessage
+render = () => {
+  puzzleEl.textContent = game1.puzzle
+  guessesEl.textContent = game1.statusMessage
+}
 
-getRandomPuzzle((error, randomPuzzle) => {
-  if(error){
-    console.log(`Error: ${error}`)
-  }else{
-    console.log(randomPuzzle)
-  }
-})
+startGame = async () => {
+  const randomPuzzle = await getRandomPuzzle('1')
+  game1 = new Hangman(randomPuzzle, 5)
+  render()
+}
+
 
 window.addEventListener('keydown', (e) => {
   if ((e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 96 && e.keyCode < 123)) {
@@ -22,3 +24,7 @@ window.addEventListener('keydown', (e) => {
 
   }
 })
+
+startGame()
+
+resetEl.addEventListener('click', startGame)
